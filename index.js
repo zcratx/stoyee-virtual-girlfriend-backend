@@ -12,7 +12,7 @@ const openai = new OpenAI({
 });
 
 const elevenLabsApiKey = process.env.ELEVEN_LABS_API_KEY;
-const voiceID = "kgG7dCoKCfLehAPWkJOE";
+const voiceID = "XiPS9cXxAVbaIWtGDHDh";
 
 const app = express();
 app.use(express.json());
@@ -44,8 +44,10 @@ const lipSyncMessage = async (message) => {
     // -y to overwrite the file
   );
   console.log(`Conversion done in ${new Date().getTime() - time}ms`);
+  //Rhubarb is in the following location: 
   await execCommand(
     `./bin/rhubarb -f json -o audios/message_${message}.json audios/message_${message}.wav -r phonetic`
+    //`/Users/nandishkamat/Documents/learnings/wawasensei/r3f-lipsync-tutorial/Rhubarb-Lip-Sync-1.13.0-macOS/rhubarb -f json -o audios/message_${message}.json audios/message_${message}.wav -r phonetic`
   );
   // -r phonetic is faster but less accurate
   console.log(`Lip sync done in ${new Date().getTime() - time}ms`);
@@ -124,6 +126,9 @@ app.post("/chat", async (req, res) => {
   if (messages.messages) {
     messages = messages.messages; // ChatGPT is not 100% reliable, sometimes it directly returns an array and sometimes a JSON object with a messages property
   }
+  console.log("The response from ChatGPT is ", messages)
+
+
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
     // generate audio file
